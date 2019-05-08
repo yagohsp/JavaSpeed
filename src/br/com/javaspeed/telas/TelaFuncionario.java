@@ -82,10 +82,18 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Funcionario já existente");
             funcionarioExistente = 0;
         } else {
+            String usuario = txtFunUsuario.getText();
+            String senha = txtFunSenha.getText();
+            String nome = txtFunNome.getText();
+            String cpf = txtFunCpf.getText();
+            String endereco = txtFunEndereco.getText();
+            String telefone = txtFunTelefone.getText();
+            String data = txtFunData.getText();
+
             if (btnFunGestor.isSelected()) {
-                funcionarios.add(new Funcionario(txtFunUsuario.getText(), txtFunSenha.getText(), txtFunNome.getText(), txtFunCpf.getText(), txtFunEndereco.getText(), txtFunTelefone.getText(), txtFunData.getText(), "Gestor"));
+                funcionarios.add(new Funcionario(usuario, senha, nome, cpf, endereco, telefone, data, "Gestor"));
             } else {
-                funcionarios.add(new Funcionario(txtFunUsuario.getText(), txtFunSenha.getText(), txtFunNome.getText(), txtFunCpf.getText(), txtFunEndereco.getText(), txtFunTelefone.getText(), txtFunData.getText(), "Funcionario"));
+                funcionarios.add(new Funcionario(usuario, senha, nome, cpf, endereco, telefone, data, "Funcionario"));
             }
             JOptionPane.showMessageDialog(null, "Funcionario adicionado com sucesso");
         }
@@ -94,16 +102,25 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     }
 
     public void editarFuncionario() {
-        if (btnFunGestor.isSelected()) {
-            Funcionario editFuncionario = new Funcionario(txtFunUsuario.getText(), txtFunSenha.getText(), txtFunNome.getText(), txtFunCpf.getText(), txtFunEndereco.getText(), txtFunTelefone.getText(), txtFunData.getText(), "Gestor");
+        int id = Integer.parseInt(txtFunId.getText());
+        String usuario = txtFunUsuario.getText();
+        String senha = txtFunSenha.getText();
+        String nome = txtFunNome.getText();
+        String cpf = txtFunCpf.getText();
+        String endereco = txtFunEndereco.getText();
+        String telefone = txtFunTelefone.getText();
+        String data = txtFunData.getText();
 
-            funcionarios.set(Integer.parseInt(txtFunId.getText()), editFuncionario);
+        if (btnFunGestor.isSelected()) {
+            Funcionario editFuncionario = new Funcionario(usuario, senha, nome, cpf, endereco, telefone, data, "Gestor");
+
+            funcionarios.set(id, editFuncionario);
 
             JOptionPane.showMessageDialog(null, "Funcionario atualizado com sucesso");
         } else {
-            Funcionario editFuncionario = new Funcionario(txtFunUsuario.getText(), txtFunSenha.getText(), txtFunNome.getText(), txtFunCpf.getText(), txtFunEndereco.getText(), txtFunTelefone.getText(), txtFunData.getText(), "Funcionario");
+            Funcionario editFuncionario = new Funcionario(usuario, senha, nome, cpf, endereco, telefone, data, "Funcionario");
 
-            funcionarios.set(Integer.parseInt(txtFunId.getText()), editFuncionario);
+            funcionarios.set(id, editFuncionario);
 
             JOptionPane.showMessageDialog(null, "Funcionario atualizado com sucesso");
         }

@@ -21,16 +21,16 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         this.clientes = clientes;
 
         initComponents();
-        
+
         ((DefaultTableCellRenderer) tblClientes.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
 
         tblClientes.setModel(modeloTabela);
-        
+
         TableColumnModel modeloColuna = tblClientes.getColumnModel();
         modeloColuna.getColumn(0).setPreferredWidth(30);
         modeloColuna.getColumn(1).setPreferredWidth(170);
         tblClientes.setRowHeight(20);
-        
+
         atualizarTabela();
 
     }
@@ -95,10 +95,20 @@ public class TelaCliente extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Cliente já existente");
             clienteExistente = 0;
         } else {
+            String nome = txtCliNome.getText();
+            String cpf = txtCliCpf.getText();
+            String endereco = txtCliEndereco.getText();
+            String telefone = txtCliTelefone.getText();
+            String data = txtCliData.getText();
+            String liga = txtCliLiga.getText();
+            String patrocinador = txtCliPatrocinador.getText();
+            String moto = txtCliMoto.getText();
+            int tempo = Integer.parseInt(txtCliTempo.getText());
+
             if (btnCliSim.isSelected()) {
-                clientes.add(new Cliente(txtCliNome.getText(), txtCliCpf.getText(), txtCliEndereco.getText(), txtCliTelefone.getText(), txtCliData.getText(), txtCliLiga.getText(), txtCliPatrocinador.getText(), txtCliMoto.getText(), Integer.parseInt(txtCliTempo.getText())));
+                clientes.add(new Cliente(nome, cpf, endereco, telefone, data, liga, patrocinador, moto, tempo));
             } else {
-                clientes.add(new Cliente(txtCliNome.getText(), txtCliCpf.getText(), txtCliEndereco.getText(), txtCliTelefone.getText(), txtCliData.getText(), txtCliMoto.getText(), Integer.parseInt(txtCliTempo.getText())));
+                clientes.add(new Cliente(nome, cpf, endereco, telefone, data, moto, tempo));
             }
             JOptionPane.showMessageDialog(null, "Cliente adicionado com sucesso");
         }
@@ -107,22 +117,32 @@ public class TelaCliente extends javax.swing.JInternalFrame {
     }
 
     public void editarCliente() {
+        String nome = txtCliNome.getText();
+        String cpf = txtCliCpf.getText();
+        String endereco = txtCliEndereco.getText();
+        String telefone = txtCliTelefone.getText();
+        String data = txtCliData.getText();
+        String liga = txtCliLiga.getText();
+        String patrocinador = txtCliPatrocinador.getText();
+        String moto = txtCliMoto.getText();
+        int tempo = Integer.parseInt(txtCliTempo.getText());
+        int id = Integer.parseInt(txtCliId.getText());
 
-        if (Integer.parseInt(txtCliTempo.getText()) != 0) {
-            clientes.get(Integer.parseInt(txtCliId.getText())).alterarAluguel(Integer.parseInt(txtCliTempo.getText()));
+        if (tempo != 0) {
+            clientes.get(id).alterarAluguel(tempo);
         } else {
-            clientes.get(Integer.parseInt(txtCliId.getText())).alterarAluguel();
+            clientes.get(id).alterarAluguel();
         }
         if (btnCliSim.isSelected()) {
-            Cliente editCliente = new Cliente(txtCliNome.getText(), txtCliCpf.getText(), txtCliEndereco.getText(), txtCliTelefone.getText(), txtCliData.getText(), txtCliLiga.getText(), txtCliPatrocinador.getText(), txtCliMoto.getText(), Integer.parseInt(txtCliTempo.getText()));
+            Cliente editCliente = new Cliente(nome, cpf, endereco, telefone, data, liga, patrocinador, moto, tempo);
 
-            clientes.set(Integer.parseInt(txtCliId.getText()), editCliente);
+            clientes.set(id, editCliente);
 
             JOptionPane.showMessageDialog(null, "Cliente atualizado com sucesso");
         } else {
-            Cliente editCliente = new Cliente(txtCliNome.getText(), txtCliCpf.getText(), txtCliEndereco.getText(), txtCliTelefone.getText(), txtCliData.getText(), txtCliMoto.getText(), Integer.parseInt(txtCliTempo.getText()));
+            Cliente editCliente = new Cliente(nome, cpf, endereco, telefone, data, moto, tempo);
 
-            clientes.set(Integer.parseInt(txtCliId.getText()), editCliente);
+            clientes.set(id, editCliente);
 
             JOptionPane.showMessageDialog(null, "Cliente atualizado com sucesso");
         }

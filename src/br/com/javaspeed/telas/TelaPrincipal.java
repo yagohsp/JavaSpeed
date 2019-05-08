@@ -286,10 +286,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
         clientes.add(new Cliente("Yago Henrique dos Santos", "123.548.120.22", "Presidente Olegario", "997987452", "09/04/2018", "MotoGP", "RedBull", "ZX10", 15));
         clientes.add(new Cliente("Junior Amorim Gonçalves", "528.193.042.53", "Patos de Minas", "954723481", "21/09/2018", "600CC SP", "Guaraná", "SS1000RR", 12));
         clientes.add(new Cliente("João Matias Loredo", "647.249.716.40", "Patos de Minas", "997246128", "14/03/2019", "YZF-R1", 4));
+        clientes.add(new Cliente("Michel Augusto Almeida", "416.746.257.10", "Rio de Janeiro", "994712158", "30/01/2019", "Fat Boy", 9));
         
         motos.add(new Moto("Esportiva", "ZX10", 2017, 4, 999, 17, 450, "/br/com/javaspeed/icones/ZX10.jpg", clientes.get(0)));
         motos.add(new Moto("Esportiva", "S1000RR", 2016, 4, 999, (float) 17.5, 435, "/br/com/javaspeed/icones/S1000RR.jpg", clientes.get(1)));
-        
+        motos.add(new Moto("Custom", "Fat Boy", 2018, 2, 1584, 18, 330, "/br/com/javaspeed/icones/Fat Boy.jpg", clientes.get(2)));
+        motos.add(new Moto("Esportiva", "R1", 2016, 4, 998, 17, 440, "/br/com/javaspeed/icones/R1.jpg", null));
     }
 
     /**

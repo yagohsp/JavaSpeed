@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -16,16 +17,17 @@ public class TelaMotos extends javax.swing.JInternalFrame {
 
     public ArrayList<Moto> motos = new ArrayList<>();
     public ArrayList<Cliente> clientes = new ArrayList<>();
-    
+
     private Cliente proprietario;
-        
+    private int proprietarioExistente = 0;
+
     private String coluna[] = {"Moto", "Proprietario"};
     private DefaultTableModel modeloTabela = new DefaultTableModel(coluna, 0);
 
     public TelaMotos(ArrayList<Moto> motos, ArrayList<Cliente> clientes) {
         this.motos = motos;
         this.clientes = clientes;
-        
+
         initComponents();
 
         ((DefaultTableCellRenderer) tblMotos.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
@@ -45,13 +47,17 @@ public class TelaMotos extends javax.swing.JInternalFrame {
 
         for (int i = 0; i < motos.size(); i++) {
             String moto = motos.get(i).modelo;
-            String proprietario = motos.get(i).proprietario.nome;
+            String proprietario;
+            if (motos.get(i).proprietario != null) {
+                proprietario = motos.get(i).proprietario.nome;
+            } else {
+                proprietario = "Sem proprietario";
+            }
 
             Object[] data = {moto, proprietario};
 
             modeloTabela.addRow(data);
-            
-            System.out.println(motos.get(i).imagem);
+
         }
         txtMotoId.setText(null);
         txtMotoModelo.setText(null);
@@ -77,8 +83,12 @@ public class TelaMotos extends javax.swing.JInternalFrame {
         txtMotoCombustivel.setText(Float.toString(motos.get(index).capCombustivel));
         txtMotoPreco.setText(Float.toString(motos.get(index).precoDia));
         setarImagem(motos.get(index).imagem);
-        txtMotoProprietario.setText(motos.get(index).proprietario.nome);
 
+        if (motos.get(index).proprietario != null) {
+            txtMotoProprietario.setText(motos.get(index).proprietario.nome);
+        } else {
+            txtMotoProprietario.setText("Sem proprietário");
+        }
     }
 
     public void setarImagem(String imagem) {
@@ -87,26 +97,85 @@ public class TelaMotos extends javax.swing.JInternalFrame {
 
     //CRUD
     public void adicionarMoto() {
-        clientes.forEach((n) ->{
-            if(n.nome.equals(txtMotoProprietario.getText())){
-                proprietario = n;
-            }
-        });
-        
-        txtMotoId.getText();
         String modelo = txtMotoModelo.getText();
         String tipo = txtMotoTipo.getText();
         String imagem = "/br/com/javaspeed/icones/" + txtMotoModelo.getText() + ".jpg";
-        int    ano = Integer.parseInt(txtMotoAno.getText());
-        int    cilindros = Integer.parseInt(txtMotoCilindros.getText());
-        float  cilindrada = Float.parseFloat(txtMotoCilindrada.getText());
-        float  combustivel = Float.parseFloat(txtMotoCombustivel.getText());
-        float  preco = Float.parseFloat(txtMotoPreco.getText());
-        txtMotoProprietario.getText();
-        
-        motos.add(new Moto(tipo, modelo, ano, cilindros, cilindrada, combustivel, preco, imagem, proprietario));
-        
+        int ano = Integer.parseInt(txtMotoAno.getText());
+        int cilindros = Integer.parseInt(txtMotoCilindros.getText());
+        float cilindrada = Float.parseFloat(txtMotoCilindrada.getText());
+        float combustivel = Float.parseFloat(txtMotoCombustivel.getText());
+        float preco = Float.parseFloat(txtMotoPreco.getText());
+
+        clientes.forEach((cliente) -> {
+            if (cliente.nome.equals(txtMotoProprietario.getText())) {
+                proprietario = cliente;
+                proprietarioExistente = 1;
+            }
+        });
+        if (proprietarioExistente == 1) {
+            motos.add(new Moto(tipo, modelo, ano, cilindros, cilindrada, combustivel, preco, imagem, proprietario));
+            JOptionPane.showMessageDialog(null, "Moto adicionada com sucesso");
+        } else {
+            JOptionPane.showMessageDialog(null, "Proprietário inexistente");
+        }
+        proprietarioExistente = 0;
+
         atualizarTabela();
+    }
+
+    public void editarMoto() {
+        int id = Integer.parseInt(txtMotoId.getText());
+        String modelo = txtMotoModelo.getText();
+        String tipo = txtMotoTipo.getText();
+        String imagem = "/br/com/javaspeed/icones/" + txtMotoModelo.getText() + ".jpg";
+        int ano = Integer.parseInt(txtMotoAno.getText());
+        int cilindros = Integer.parseInt(txtMotoCilindros.getText());
+        float cilindrada = Float.parseFloat(txtMotoCilindrada.getText());
+        float combustivel = Float.parseFloat(txtMotoCombustivel.getText());
+        float preco = Float.parseFloat(txtMotoPreco.getText());
+
+        clientes.forEach((cliente) -> {
+            if (cliente.nome.equals(txtMotoProprietario.getText())) {
+                proprietario = cliente;
+                proprietarioExistente = 1;
+            }
+        });
+        if (proprietarioExistente == 1) {
+            Moto editMoto = new Moto(tipo, modelo, ano, cilindros, cilindrada, combustivel, preco, imagem, proprietario);
+            motos.set(id, editMoto);
+            JOptionPane.showMessageDialog(null, "Moto editada com sucesso");
+        } else {
+            JOptionPane.showMessageDialog(null, "Proprietário inexistente");
+        }
+        proprietarioExistente = 0;
+
+        atualizarTabela();
+    }
+
+    public void procurarMoto() {
+        int id = Integer.parseInt(txtMotoId.getText());
+        Moto idMoto = motos.get(id);
+
+        txtMotoModelo.setText(idMoto.modelo);
+        txtMotoTipo.setText(idMoto.tipo);
+        txtMotoAno.setText(Integer.toString(idMoto.ano));
+        txtMotoCilindros.setText(Integer.toString(idMoto.cilindros));
+        txtMotoCilindrada.setText(Float.toString(idMoto.cilindrada));
+        txtMotoCombustivel.setText(Float.toString(idMoto.capCombustivel));
+        txtMotoPreco.setText(Float.toString(idMoto.precoDia));
+
+        if (idMoto.proprietario != null) {
+            txtMotoProprietario.setText(idMoto.proprietario.nome);
+        } else {
+            txtMotoProprietario.setText("Sem proprietário");
+        }
+
+        setarImagem(idMoto.imagem);
+    }
+
+    public void excluirMoto() {
+        int id = Integer.parseInt(txtMotoId.getText());
+        motos.remove(id);
     }
 
     @SuppressWarnings("unchecked")
@@ -371,15 +440,15 @@ public class TelaMotos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnMotoAddActionPerformed
 
     private void btnMotoEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMotoEditActionPerformed
-
+        editarMoto();
     }//GEN-LAST:event_btnMotoEditActionPerformed
 
     private void btnMotoSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMotoSearchActionPerformed
-
+        procurarMoto();
     }//GEN-LAST:event_btnMotoSearchActionPerformed
 
     private void btnMotoDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMotoDeleteActionPerformed
-
+        excluirMoto();
     }//GEN-LAST:event_btnMotoDeleteActionPerformed
 
 
