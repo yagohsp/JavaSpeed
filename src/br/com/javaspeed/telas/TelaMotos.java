@@ -4,13 +4,11 @@ import br.com.javaspeed.classes.Cliente;
 import br.com.javaspeed.classes.Moto;
 import java.awt.Image;
 import java.util.ArrayList;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
 public class TelaMotos extends javax.swing.JInternalFrame {
@@ -48,6 +46,7 @@ public class TelaMotos extends javax.swing.JInternalFrame {
         for (int i = 0; i < motos.size(); i++) {
             String moto = motos.get(i).modelo;
             String proprietario;
+
             if (motos.get(i).proprietario != null) {
                 proprietario = motos.get(i).proprietario.nome;
             } else {
@@ -68,6 +67,7 @@ public class TelaMotos extends javax.swing.JInternalFrame {
         txtMotoCombustivel.setText(null);
         txtMotoPreco.setText(null);
         txtMotoProprietario.setText(null);
+        txtMotoDias.setText(null);
         txtMotoImagem.setIcon(null);
 
     }
@@ -86,13 +86,15 @@ public class TelaMotos extends javax.swing.JInternalFrame {
 
         if (motos.get(index).proprietario != null) {
             txtMotoProprietario.setText(motos.get(index).proprietario.nome);
+            txtMotoDias.setText(Integer.toString(motos.get(index).getAluguel()));
         } else {
             txtMotoProprietario.setText("Sem proprietário");
+            txtMotoDias.setText(null);
         }
     }
 
     public void setarImagem(String imagem) {
-        txtMotoImagem.setIcon(new ImageIcon(new ImageIcon(getClass().getResource(imagem)).getImage().getScaledInstance(350, 220, Image.SCALE_DEFAULT)));
+        txtMotoImagem.setIcon(new ImageIcon(new ImageIcon(getClass().getResource(imagem)).getImage().getScaledInstance(350, 220, Image.SCALE_SMOOTH)));
     }
 
     //CRUD
@@ -106,19 +108,7 @@ public class TelaMotos extends javax.swing.JInternalFrame {
         float combustivel = Float.parseFloat(txtMotoCombustivel.getText());
         float preco = Float.parseFloat(txtMotoPreco.getText());
 
-        clientes.forEach((cliente) -> {
-            if (cliente.nome.equals(txtMotoProprietario.getText())) {
-                proprietario = cliente;
-                proprietarioExistente = 1;
-            }
-        });
-        if (proprietarioExistente == 1) {
-            motos.add(new Moto(tipo, modelo, ano, cilindros, cilindrada, combustivel, preco, imagem, proprietario));
-            JOptionPane.showMessageDialog(null, "Moto adicionada com sucesso");
-        } else {
-            JOptionPane.showMessageDialog(null, "Proprietário inexistente");
-        }
-        proprietarioExistente = 0;
+        motos.add(new Moto(tipo, modelo, ano, cilindros, cilindrada, combustivel, preco, imagem, null, 0));
 
         atualizarTabela();
     }
@@ -137,17 +127,10 @@ public class TelaMotos extends javax.swing.JInternalFrame {
         clientes.forEach((cliente) -> {
             if (cliente.nome.equals(txtMotoProprietario.getText())) {
                 proprietario = cliente;
-                proprietarioExistente = 1;
             }
         });
-        if (proprietarioExistente == 1) {
-            Moto editMoto = new Moto(tipo, modelo, ano, cilindros, cilindrada, combustivel, preco, imagem, proprietario);
-            motos.set(id, editMoto);
-            JOptionPane.showMessageDialog(null, "Moto editada com sucesso");
-        } else {
-            JOptionPane.showMessageDialog(null, "Proprietário inexistente");
-        }
-        proprietarioExistente = 0;
+        Moto editMoto = new Moto(tipo, modelo, ano, cilindros, cilindrada, combustivel, preco, imagem, proprietario, 0);
+        motos.set(id, editMoto);
 
         atualizarTabela();
     }
@@ -166,8 +149,10 @@ public class TelaMotos extends javax.swing.JInternalFrame {
 
         if (idMoto.proprietario != null) {
             txtMotoProprietario.setText(idMoto.proprietario.nome);
+            txtMotoDias.setText(Integer.toString(idMoto.getAluguel()));
         } else {
             txtMotoProprietario.setText("Sem proprietário");
+            txtMotoDias.setText(null);
         }
 
         setarImagem(idMoto.imagem);
@@ -176,6 +161,10 @@ public class TelaMotos extends javax.swing.JInternalFrame {
     public void excluirMoto() {
         int id = Integer.parseInt(txtMotoId.getText());
         motos.remove(id);
+
+        JOptionPane.showMessageDialog(null, "Moto removida com sucesso");
+
+        atualizarTabela();
     }
 
     @SuppressWarnings("unchecked")
@@ -207,6 +196,9 @@ public class TelaMotos extends javax.swing.JInternalFrame {
         btnMotoEdit = new javax.swing.JButton();
         btnMotoSearch = new javax.swing.JButton();
         btnMotoDelete = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        txtMotoDias = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -214,6 +206,23 @@ public class TelaMotos extends javax.swing.JInternalFrame {
         setTitle("Motos");
         setName(""); // NOI18N
         setPreferredSize(new java.awt.Dimension(800, 500));
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameDeiconified(evt);
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         tblMotos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -258,6 +267,8 @@ public class TelaMotos extends javax.swing.JInternalFrame {
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Proprietário");
+
+        txtMotoProprietario.setFocusable(false);
 
         txtMotoImagem.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -311,6 +322,12 @@ public class TelaMotos extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel10.setText("Alugada por");
+
+        txtMotoDias.setFocusable(false);
+
+        jLabel11.setText("dias");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -327,15 +344,21 @@ public class TelaMotos extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtMotoId, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(102, 102, 102)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(93, 93, 93)
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtMotoProprietario, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel10)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel8)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtMotoProprietario, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtMotoImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                                .addComponent(txtMotoDias, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel11)))
+                        .addGap(18, 18, 18)
+                        .addComponent(txtMotoImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
             .addGroup(layout.createSequentialGroup()
@@ -386,8 +409,17 @@ public class TelaMotos extends javax.swing.JInternalFrame {
                             .addComponent(txtMotoModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9)
                             .addComponent(txtMotoId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(txtMotoImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(txtMotoImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(56, 56, 56)
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtMotoDias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
@@ -425,7 +457,7 @@ public class TelaMotos extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(txtMotoCilindros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
 
         pack();
@@ -451,6 +483,10 @@ public class TelaMotos extends javax.swing.JInternalFrame {
         excluirMoto();
     }//GEN-LAST:event_btnMotoDeleteActionPerformed
 
+    private void formInternalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameDeiconified
+        atualizarTabela();
+    }//GEN-LAST:event_formInternalFrameDeiconified
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMotoAdd;
@@ -458,6 +494,8 @@ public class TelaMotos extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnMotoEdit;
     private javax.swing.JButton btnMotoSearch;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -472,6 +510,7 @@ public class TelaMotos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtMotoCilindrada;
     private javax.swing.JTextField txtMotoCilindros;
     private javax.swing.JTextField txtMotoCombustivel;
+    private javax.swing.JTextField txtMotoDias;
     private javax.swing.JTextField txtMotoId;
     private javax.swing.JLabel txtMotoImagem;
     private javax.swing.JTextField txtMotoModelo;
