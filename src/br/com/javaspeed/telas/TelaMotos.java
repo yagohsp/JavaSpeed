@@ -94,7 +94,11 @@ public class TelaMotos extends javax.swing.JInternalFrame {
     }
 
     public void setarImagem(String imagem) {
-        txtMotoImagem.setIcon(new ImageIcon(new ImageIcon(getClass().getResource(imagem)).getImage().getScaledInstance(350, 220, Image.SCALE_SMOOTH)));
+        try {
+            txtMotoImagem.setIcon(new ImageIcon(new ImageIcon(getClass().getResource(imagem)).getImage().getScaledInstance(350, 220, Image.SCALE_SMOOTH)));
+        } catch (Exception e) {
+            txtMotoImagem.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/br/com/javaspeed/icones/default.jpg")).getImage().getScaledInstance(350, 220, Image.SCALE_SMOOTH)));
+        }
     }
 
     //CRUD
@@ -115,9 +119,9 @@ public class TelaMotos extends javax.swing.JInternalFrame {
 
     public void editarMoto() {
         int id = Integer.parseInt(txtMotoId.getText());
-        String modelo = txtMotoModelo.getText();
+        String modelo = motos.get(id).modelo;
         String tipo = txtMotoTipo.getText();
-        String imagem = "/br/com/javaspeed/icones/" + txtMotoModelo.getText() + ".jpg";
+        String imagem = "/br/com/javaspeed/icones/" + motos.get(id).modelo + ".jpg";
         int ano = Integer.parseInt(txtMotoAno.getText());
         int cilindros = Integer.parseInt(txtMotoCilindros.getText());
         float cilindrada = Float.parseFloat(txtMotoCilindrada.getText());

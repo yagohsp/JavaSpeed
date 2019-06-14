@@ -28,7 +28,6 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         columnModel.getColumn(0).setPreferredWidth(30);
         columnModel.getColumn(1).setPreferredWidth(170);
         tblClientes.setRowHeight(20);
-        atualizarTabela();
     }
 
     public void atualizarTabela() {
@@ -69,6 +68,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
             btnFunFuncionario.setSelected(true);
         }
 
+        funcionarios.get(index).dados();
     }
 
     //CRUD
@@ -186,6 +186,23 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         setMaximizable(true);
         setTitle("Cadastro de Funcionários");
         setPreferredSize(new java.awt.Dimension(800, 480));
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameDeiconified(evt);
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel11.setText("Senha");
@@ -445,6 +462,10 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
 
     private void btnFunGestorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFunGestorActionPerformed
     }//GEN-LAST:event_btnFunGestorActionPerformed
+
+    private void formInternalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameDeiconified
+        atualizarTabela();
+    }//GEN-LAST:event_formInternalFrameDeiconified
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

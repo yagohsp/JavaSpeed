@@ -3,6 +3,7 @@ package br.com.javaspeed.telas;
 import br.com.javaspeed.classes.Cliente;
 import br.com.javaspeed.classes.Funcionario;
 import br.com.javaspeed.classes.Moto;
+import br.com.javaspeed.classes.Nomes;
 import java.awt.Color;
 
 import javax.swing.JOptionPane;
@@ -11,14 +12,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class TelaPrincipal extends javax.swing.JFrame {
+public class TelaPrincipal extends javax.swing.JFrame implements Nomes {
 
     private TelaLogin telaLogin;
     private TelaCliente telaCliente;
     private TelaFuncionario telaFuncionario;
-    private TelaMotos telaMotos;
-    
-    
+    private TelaMotos telaMoto;
+    private TelaAluguel telaAluguel;
+
     ArrayList<Funcionario> funcionarios = new ArrayList<>();
     ArrayList<Moto> motos = new ArrayList<>();
     ArrayList<Cliente> clientes = new ArrayList<>();
@@ -28,13 +29,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         dados();
         logar();
-
-        telaCliente = new TelaCliente(clientes);
-        telaFuncionario = new TelaFuncionario(funcionarios);
-        telaMotos = new TelaMotos(motos, clientes);
+        nomes();
         
-        lblLogadoNome1.setText(telaLogin.logado.nome.substring(0, 17));
-        lblLogadoNome2.setText(telaLogin.logado.nome.substring(17, telaLogin.logado.nome.length()));
+        telaCliente = new TelaCliente(clientes, motos);
+        telaFuncionario = new TelaFuncionario(funcionarios);
+        telaMoto = new TelaMotos(motos, clientes);
+        telaAluguel = new TelaAluguel(motos, clientes);
+
+        lblLogadoNome1.setText(telaLogin.logado.nome);
         lblLogadoPerfil.setText(telaLogin.logado.getPerfil());
 
         Date data = new Date();
@@ -45,6 +47,21 @@ public class TelaPrincipal extends javax.swing.JFrame {
             menuCadFuncionario.setEnabled(true);
         }
     }
+
+    @Override
+    public void nomes() {
+        System.out.println("Funcionarios:");
+        this.funcionarios.forEach((a)-> {
+            System.out.println(a.nome);
+        });
+        System.out.println("\nClientes:");
+        this.clientes.forEach((a)-> {
+            System.out.println(a.nome);
+        });
+        System.out.println("\n");
+    }
+
+    ;
 
     public void logar() {
         telaLogin = new TelaLogin(this, true, funcionarios);
@@ -60,13 +77,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         desktop = new javax.swing.JDesktopPane();
-        jButton1 = new javax.swing.JButton();
         painelFuncionario = new javax.swing.JPanel();
         lblLogadoPerfil = new javax.swing.JLabel();
-        lblLogadoNome2 = new javax.swing.JLabel();
         lblLogadoNome1 = new javax.swing.JLabel();
         lblData = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         lblBackground = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuCad = new javax.swing.JMenu();
@@ -107,22 +121,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         getContentPane().add(desktop, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 500));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/javaspeed/icones/Update.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 40, -1));
-
         painelFuncionario.setBackground(new Color(255,255,255,100));
 
         lblLogadoPerfil.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lblLogadoPerfil.setText("Perfil");
-
-        lblLogadoNome2.setBackground(new java.awt.Color(255, 255, 255));
-        lblLogadoNome2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        lblLogadoNome2.setText("Nome");
 
         lblLogadoNome1.setBackground(new java.awt.Color(255, 255, 255));
         lblLogadoNome1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
@@ -132,43 +134,34 @@ public class TelaPrincipal extends javax.swing.JFrame {
         lblData.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblData.setText("Data");
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel1.setText("Atualizar dados");
-
         javax.swing.GroupLayout painelFuncionarioLayout = new javax.swing.GroupLayout(painelFuncionario);
         painelFuncionario.setLayout(painelFuncionarioLayout);
         painelFuncionarioLayout.setHorizontalGroup(
             painelFuncionarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelFuncionarioLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(21, 21, 21)
                 .addGroup(painelFuncionarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblData)
-                    .addComponent(lblLogadoNome1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblLogadoPerfil)
-                    .addComponent(lblLogadoNome2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelFuncionarioLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(68, 68, 68))
+                    .addComponent(lblLogadoNome1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(painelFuncionarioLayout.createSequentialGroup()
+                        .addGroup(painelFuncionarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblData)
+                            .addComponent(lblLogadoPerfil))
+                        .addGap(0, 189, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         painelFuncionarioLayout.setVerticalGroup(
             painelFuncionarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelFuncionarioLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel1)
-                .addGap(14, 14, 14)
+                .addContainerGap()
                 .addComponent(lblLogadoPerfil)
-                .addGap(14, 14, 14)
-                .addComponent(lblLogadoNome1)
-                .addGap(3, 3, 3)
-                .addComponent(lblLogadoNome2)
                 .addGap(18, 18, 18)
+                .addComponent(lblLogadoNome1)
+                .addGap(39, 39, 39)
                 .addComponent(lblData)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
-        getContentPane().add(painelFuncionario, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 200));
+        getContentPane().add(painelFuncionario, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         lblBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/javaspeed/icones/wallpaper.jpg"))); // NOI18N
         getContentPane().add(lblBackground, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -205,6 +198,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         menuCadAluguel.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         menuCadAluguel.setText("Aluguel");
+        menuCadAluguel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadAluguelActionPerformed(evt);
+            }
+        });
         menuCad.add(menuCadAluguel);
 
         jMenuBar1.add(menuCad);
@@ -237,7 +235,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         setJMenuBar(jMenuBar1);
 
-        setSize(new java.awt.Dimension(816, 558));
+        pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -259,39 +257,43 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void menuCadClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadClienteActionPerformed
         telaCliente.setVisible(true);
         desktop.add(telaCliente);
+        telaCliente.atualizarTabela();
     }//GEN-LAST:event_menuCadClienteActionPerformed
 
     private void menuCadMotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadMotoActionPerformed
-        telaMotos.setVisible(true);
-        desktop.add(telaMotos);
+        telaMoto.setVisible(true);
+        desktop.add(telaMoto);
+        telaMoto.atualizarTabela();
     }//GEN-LAST:event_menuCadMotoActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        clientes = telaCliente.clientes;
-        JOptionPane.showMessageDialog(null, "Dados atualizados com sucesso");
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void menuCadFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadFuncionarioActionPerformed
         telaFuncionario.setVisible(true);
         desktop.add(telaFuncionario);
+        telaFuncionario.atualizarTabela();
     }//GEN-LAST:event_menuCadFuncionarioActionPerformed
+
+    private void menuCadAluguelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadAluguelActionPerformed
+        telaAluguel.setVisible(true);
+        desktop.add(telaAluguel);
+        telaAluguel.atualizarTabelas();
+    }//GEN-LAST:event_menuCadAluguelActionPerformed
 
     private void dados() {
 
-        Funcionario yago = new Funcionario("admin", "admin", "Yago Henrique dos Santos", "123.548.120.22", "Presidente Olegario", "09/04/2018", "997987452", "Gestor");
-        Funcionario junior = new Funcionario("user", "user", "Junior Amorim Gonçalves", "528.193.042.53", "Patos de Minas", "21/09/2018", "954723481", "Funcionario");
+        Funcionario yago = new Funcionario("admin", "admin", "Yago Henrique dos Santos", "123.548.120.22", "Presidente Olegario", "997987452", "09/04/2018", "Gestor");
+        Funcionario junior = new Funcionario("user", "user", "Junior Amorim Gonçalves", "528.193.042.53", "Patos de Minas", "954723481", "21/09/2018", "Funcionario");
         funcionarios.add(junior);
         funcionarios.add(yago);
 
-        clientes.add(new Cliente("Yago Henrique dos Santos", "123.548.120.22", "Presidente Olegario", "997987452", "09/04/2018", "MotoGP", "RedBull", "ZX10", 15));
-        clientes.add(new Cliente("Junior Amorim Gonçalves", "528.193.042.53", "Patos de Minas", "954723481", "21/09/2018", "600CC SP", "Guaraná", "SS1000RR", 12));
-        clientes.add(new Cliente("João Matias Loredo", "647.249.716.40", "Patos de Minas", "997246128", "14/03/2019", "YZF-R1", 4));
-        clientes.add(new Cliente("Michel Augusto Almeida", "416.746.257.10", "Rio de Janeiro", "994712158", "30/01/2019", "Fat Boy", 9));
-        
-        motos.add(new Moto("Esportiva", "ZX10", 2017, 4, 999, 17, 450, "/br/com/javaspeed/icones/ZX10.jpg", clientes.get(0)));
-        motos.add(new Moto("Esportiva", "S1000RR", 2016, 4, 999, (float) 17.5, 435, "/br/com/javaspeed/icones/S1000RR.jpg", clientes.get(1)));
-        motos.add(new Moto("Custom", "Fat Boy", 2018, 2, 1584, 18, 330, "/br/com/javaspeed/icones/Fat Boy.jpg", clientes.get(2)));
-        motos.add(new Moto("Esportiva", "R1", 2016, 4, 998, 17, 440, "/br/com/javaspeed/icones/R1.jpg", null));
+        clientes.add(new Cliente("Yago Henrique dos Santos", "123.548.120.22", "Presidente Olegario", "997987452", "09/04/2018", "MotoGP", "RedBull", "ZX10"));
+        clientes.add(new Cliente("Junior Amorim Gonçalves", "528.193.042.53", "Patos de Minas", "954723481", "21/09/2018", "600CC SP", "Guaraná", "SS1000RR"));
+        clientes.add(new Cliente("João Matias Loredo", "647.249.716.40", "Patos de Minas", "997246128", "14/03/2019", "YZF-R1"));
+        clientes.add(new Cliente("Michel Augusto Almeida", "416.746.257.10", "Rio de Janeiro", "994712158", "30/01/2019", "Fat Boy"));
+
+        motos.add(new Moto("Esportiva", "ZX10", 2017, 4, 999, 17, 450, "/br/com/javaspeed/icones/ZX10.jpg", clientes.get(0), 8));
+        motos.add(new Moto("Esportiva", "S1000RR", 2016, 4, 999, (float) 17.5, 435, "/br/com/javaspeed/icones/S1000RR.jpg", clientes.get(1), 12));
+        motos.add(new Moto("Custom", "Fat Boy", 2018, 2, 1584, 18, 330, "/br/com/javaspeed/icones/Fat Boy.jpg", clientes.get(2), 6));
+        motos.add(new Moto("Esportiva", "R1", 2016, 4, 998, 17, 440, "/br/com/javaspeed/icones/R1.jpg", null, 0));
     }
 
     /**
@@ -332,13 +334,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktop;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblLogadoNome1;
-    private javax.swing.JLabel lblLogadoNome2;
     private javax.swing.JLabel lblLogadoPerfil;
     private javax.swing.JMenuItem menuAjuSobre;
     private javax.swing.JMenu menuAjuda;

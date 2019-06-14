@@ -3,13 +3,8 @@ package br.com.javaspeed.classes;
 public class Cliente extends Pessoa {
 
     public String dataCadastro, liga, patrocinador, motoPrefencial;
-    private int tempoAluguel;
 
-    public int getTempoAluguel() {
-        return tempoAluguel;
-    }
-
-    public Cliente(String nome, String cpf, String endereco, String telefone, String dataCadastro, String liga, String patrocinador, String motoPreferencial, int tempoAluguel) {
+    public Cliente(String nome, String cpf, String endereco, String telefone, String dataCadastro, String liga, String patrocinador, String motoPreferencial) {
         this.nome = nome;
         this.cpf = cpf;
         this.endereco = endereco;
@@ -18,26 +13,25 @@ public class Cliente extends Pessoa {
         this.liga = liga;
         this.patrocinador = patrocinador;
         this.motoPrefencial = motoPreferencial;
-        this.tempoAluguel = tempoAluguel;
     }
 
-    public Cliente(String nome, String cpf, String endereco, String telefone, String dataCadastro, String motoPreferencial, int tempoAluguel) {
+    public Cliente(String nome, String cpf, String endereco, String telefone, String dataCadastro, String motoPreferencial) {
         this.nome = nome;
         this.cpf = cpf;
         this.endereco = endereco;
         this.telefone = telefone;
         this.dataCadastro = dataCadastro;
         this.motoPrefencial = motoPreferencial;
-        this.tempoAluguel = tempoAluguel;
     }
     
-    public void alterarAluguel(){
-        this.tempoAluguel = 0;
+        public void dados(){
+        System.out.println("Nome: " + nome);
+        System.out.println("Cpf: " + cpf);
+        System.out.println("Endereço: " + endereco);
+        System.out.println("Telefone: " + telefone);
+        System.out.println("Data de Contração: " + dataCadastro);
+        System.out.println("Liga: " + liga);
+        System.out.println("Patrocinador: " + patrocinador);
+        System.out.println("Moto Prefencial: " + motoPrefencial);
     }
-    
-    public void alterarAluguel(int tempo){
-        this.tempoAluguel = tempo;
-    }
-    
-    
 }

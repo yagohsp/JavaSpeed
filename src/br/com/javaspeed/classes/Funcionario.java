@@ -44,4 +44,15 @@ public final class Funcionario extends Pessoa {
         this.senha = senha;
     }
    
+    @Override
+    public void dados(){
+        System.out.println("Nome: " + nome);
+        System.out.println("Cpf: " + cpf);
+        System.out.println("Endereço: " + endereco);
+        System.out.println("Telefone: " + telefone);
+        System.out.println("Data de Contração: " + dataContratacao);
+        System.out.println("Usuário: " + getUsuario());
+        System.out.println("Senha: " + getSenha());
+        System.out.println("Perfil: " + getPerfil());
+    }
 }

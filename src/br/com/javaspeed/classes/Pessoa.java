@@ -1,6 +1,7 @@
 package br.com.javaspeed.classes;
 
-public abstract class Pessoa {
+public abstract class Pessoa{
     public String nome, cpf, telefone, endereco;
     
+    public abstract void dados();
 }
